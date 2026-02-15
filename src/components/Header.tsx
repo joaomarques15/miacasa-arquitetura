@@ -10,6 +10,7 @@ const navLinks = [
   { label: "A Empresa", to: "/empresa" },
   { label: "Projetos", to: "/projetos" },
   { label: "Obras e Reformas", to: "/obras" },
+  { label: "Serviços", to: "/servicos" },
   { label: "Contato", to: "/contato" },
 ];
 
@@ -30,9 +31,8 @@ const Header = () => {
             <Link
               key={link.to}
               to={link.to}
-              className={`text-sm font-medium tracking-wide uppercase transition-colors hover:text-primary ${
-                location.pathname === link.to ? "text-primary" : "text-foreground/80"
-              }`}
+              className={`text-sm font-medium tracking-wide uppercase transition-colors hover:text-primary ${location.pathname === link.to ? "text-primary" : "text-foreground/80"
+                }`}
             >
               {link.label}
             </Link>
@@ -63,9 +63,8 @@ const Header = () => {
                 key={link.to}
                 to={link.to}
                 onClick={() => setOpen(false)}
-                className={`text-sm font-medium tracking-wide uppercase transition-colors hover:text-primary ${
-                  location.pathname === link.to ? "text-primary" : "text-foreground/80"
-                }`}
+                className={`text-sm font-medium tracking-wide uppercase transition-colors hover:text-primary ${location.pathname === link.to ? "text-primary" : "text-foreground/80"
+                  }`}
               >
                 {link.label}
               </Link>
