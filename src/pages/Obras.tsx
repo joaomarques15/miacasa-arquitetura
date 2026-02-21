@@ -2,16 +2,18 @@ import { useState } from "react";
 import Layout from "@/components/Layout";
 import ScrollReveal from "@/components/ScrollReveal";
 import ImageLightbox from "@/components/ImageLightbox";
-import { properties, type Property } from "@/data/properties";
-import { Button } from "@/components/ui/button";
+import { properties } from "@/data/properties";
+
+// Flatten all images into a single list
+const allImages = properties.flatMap((p) => p.images);
 
 const Obras = () => {
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  const openGallery = (property: Property, index = 0) => {
-    setSelectedProperty(property);
+  const openImage = (index: number) => {
     setLightboxIndex(index);
+    setLightboxOpen(true);
   };
 
   return (
@@ -31,39 +33,23 @@ const Obras = () => {
         </div>
       </section>
 
-      {/* Gallery Grid */}
+      {/* Masonry-style Gallery */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {properties.map((property, i) => (
-              <ScrollReveal key={property.id} delay={i * 0.05}>
-                <div className="group relative overflow-hidden border border-border bg-card">
-                  <div className="aspect-[4/3] overflow-hidden">
-                    <img
-                      src={property.cover}
-                      alt={property.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="p-5">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-heading text-lg font-semibold">{property.title}</h3>
-                      <span className={`text-xs uppercase tracking-wider font-medium ${
-                        property.status === "Em andamento" ? "text-primary" : "text-muted-foreground"
-                      }`}>
-                        {property.status}
-                      </span>
-                    </div>
-                    <p className="text-muted-foreground text-xs mb-4">{property.images.length} fotos</p>
-                    <Button
-                      onClick={() => openGallery(property)}
-                      className="w-full rounded-none uppercase tracking-wider text-xs font-body"
-                    >
-                      Ver Detalhes
-                    </Button>
-                  </div>
-                </div>
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+            {allImages.map((src, i) => (
+              <ScrollReveal key={i} delay={(i % 6) * 0.04}>
+                <button
+                  onClick={() => openImage(i)}
+                  className="group block w-full overflow-hidden border border-border break-inside-avoid"
+                >
+                  <img
+                    src={src}
+                    alt={`Obra ${i + 1}`}
+                    className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </button>
               </ScrollReveal>
             ))}
           </div>
@@ -72,11 +58,11 @@ const Obras = () => {
 
       {/* Lightbox */}
       <ImageLightbox
-        images={selectedProperty?.images ?? []}
+        images={allImages}
         initialIndex={lightboxIndex}
-        open={!!selectedProperty}
-        onOpenChange={(open) => { if (!open) setSelectedProperty(null); }}
-        title={selectedProperty?.title}
+        open={lightboxOpen}
+        onOpenChange={setLightboxOpen}
+        title="Obras e Reformas"
       />
     </Layout>
   );
