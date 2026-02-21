@@ -1,8 +1,10 @@
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Ruler, HardHat, Users } from "lucide-react";
+import { ArrowRight, Ruler, HardHat, Users, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import ScrollReveal from "@/components/ScrollReveal";
+import { heroImages, properties } from "@/data/properties";
 
 const BRIEFING_URL = "https://refresher.com.br/SXpyZXZxMWlMV0c2LzJTU3lETGREdz09/briefing";
 
@@ -27,13 +29,6 @@ const highlights = [
   },
 ];
 
-const portfolioItems = [
-  { id: 1, title: "Residência Lago", category: "Residencial" },
-  { id: 2, title: "Escritório Moderno", category: "Comercial" },
-  { id: 3, title: "Apartamento Centro", category: "Interiores" },
-  { id: 4, title: "Casa de Campo", category: "Residencial" },
-];
-
 const testimonials = [
   {
     name: "Ana Carolina S.",
@@ -50,11 +45,47 @@ const testimonials = [
 ];
 
 const Index = () => {
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  const nextHero = useCallback(() => {
+    setHeroIndex((c) => (c === heroImages.length - 1 ? 0 : c + 1));
+  }, []);
+
+  const prevHero = useCallback(() => {
+    setHeroIndex((c) => (c === 0 ? heroImages.length - 1 : c - 1));
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(nextHero, 5000);
+    return () => clearInterval(timer);
+  }, [nextHero]);
+
+  // Pick 4 properties for preview
+  const portfolioItems = properties.slice(0, 4);
+
   return (
     <Layout>
-      {/* Hero */}
-      <section className="relative min-h-[85vh] flex items-center bg-secondary">
-        <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/95 to-secondary/60" />
+      {/* Hero with Carousel */}
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+        {/* Background images */}
+        {heroImages.map((src, i) => (
+          <div
+            key={i}
+            className="absolute inset-0 transition-opacity duration-1000"
+            style={{ opacity: i === heroIndex ? 1 : 0 }}
+          >
+            <img
+              src={src}
+              alt={`MIA CASA destaque ${i + 1}`}
+              className="w-full h-full object-cover"
+              loading={i === 0 ? "eager" : "lazy"}
+            />
+          </div>
+        ))}
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-secondary/90 via-secondary/70 to-secondary/30" />
+
+        {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl">
             <ScrollReveal>
@@ -92,6 +123,26 @@ const Index = () => {
               </div>
             </ScrollReveal>
           </div>
+        </div>
+
+        {/* Hero Nav */}
+        <div className="absolute bottom-8 right-8 z-10 flex items-center gap-3">
+          <button onClick={prevHero} className="p-2 bg-secondary/50 hover:bg-secondary/70 text-secondary-foreground/80 transition-colors" aria-label="Anterior">
+            <ChevronLeft size={20} />
+          </button>
+          <div className="flex gap-1.5">
+            {heroImages.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setHeroIndex(i)}
+                className={`w-2 h-2 rounded-full transition-all ${i === heroIndex ? "bg-primary w-6" : "bg-secondary-foreground/30"}`}
+                aria-label={`Slide ${i + 1}`}
+              />
+            ))}
+          </div>
+          <button onClick={nextHero} className="p-2 bg-secondary/50 hover:bg-secondary/70 text-secondary-foreground/80 transition-colors" aria-label="Próxima">
+            <ChevronRight size={20} />
+          </button>
         </div>
       </section>
 
@@ -134,7 +185,7 @@ const Index = () => {
                 <h2 className="text-3xl md:text-4xl font-heading font-semibold">Nossos Projetos</h2>
               </div>
               <Link
-                to="/projetos"
+                to="/obras"
                 className="hidden md:inline-flex items-center gap-2 text-primary text-sm font-medium hover:gap-3 transition-all"
               >
                 Ver todos <ArrowRight size={16} />
@@ -144,10 +195,16 @@ const Index = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {portfolioItems.map((item, i) => (
               <ScrollReveal key={item.id} delay={i * 0.1}>
-                <Link to="/projetos" className="group block relative overflow-hidden aspect-[3/4]">
-                  <div className="absolute inset-0 bg-secondary/80 group-hover:bg-secondary/60 transition-colors" />
+                <Link to="/obras" className="group block relative overflow-hidden aspect-[3/4]">
+                  <img
+                    src={item.cover}
+                    alt={item.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/80 via-secondary/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <p className="text-primary/80 text-xs uppercase tracking-widest mb-1">{item.category}</p>
+                    <p className="text-primary/80 text-xs uppercase tracking-widest mb-1">{item.status}</p>
                     <h3 className="text-secondary-foreground font-heading text-xl font-semibold">{item.title}</h3>
                   </div>
                 </Link>
@@ -156,10 +213,10 @@ const Index = () => {
           </div>
           <div className="md:hidden mt-8 text-center">
             <Link
-              to="/projetos"
+              to="/obras"
               className="inline-flex items-center gap-2 text-primary text-sm font-medium"
             >
-              Ver todos os projetos <ArrowRight size={16} />
+              Ver todas as obras <ArrowRight size={16} />
             </Link>
           </div>
         </div>
