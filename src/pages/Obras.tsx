@@ -1,16 +1,19 @@
+import { useState } from "react";
 import Layout from "@/components/Layout";
 import ScrollReveal from "@/components/ScrollReveal";
-
-const obras = [
-  { id: 1, title: "Reforma Apartamento Centro", status: "Concluído" },
-  { id: 2, title: "Construção Residência Ipanema", status: "Concluído" },
-  { id: 3, title: "Reforma Comercial Bela Vista", status: "Em andamento" },
-  { id: 4, title: "Ampliação Casa Tristeza", status: "Concluído" },
-  { id: 5, title: "Reforma Cozinha Moinhos", status: "Concluído" },
-  { id: 6, title: "Construção Sobrado Petrópolis", status: "Em andamento" },
-];
+import ImageLightbox from "@/components/ImageLightbox";
+import { properties, type Property } from "@/data/properties";
+import { Button } from "@/components/ui/button";
 
 const Obras = () => {
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openGallery = (property: Property, index = 0) => {
+    setSelectedProperty(property);
+    setLightboxIndex(index);
+  };
+
   return (
     <Layout>
       {/* Hero */}
@@ -28,25 +31,37 @@ const Obras = () => {
         </div>
       </section>
 
-      {/* Gallery */}
+      {/* Gallery Grid */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {obras.map((obra, i) => (
-              <ScrollReveal key={obra.id} delay={i * 0.05}>
-                <div className="group relative overflow-hidden border border-border">
-                  <div className="aspect-[4/3] bg-secondary/20 flex items-center justify-center">
-                    <span className="text-muted-foreground text-sm">Foto da obra</span>
+            {properties.map((property, i) => (
+              <ScrollReveal key={property.id} delay={i * 0.05}>
+                <div className="group relative overflow-hidden border border-border bg-card">
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img
+                      src={property.cover}
+                      alt={property.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
                   </div>
                   <div className="p-5">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-heading text-lg font-semibold">{obra.title}</h3>
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-heading text-lg font-semibold">{property.title}</h3>
+                      <span className={`text-xs uppercase tracking-wider font-medium ${
+                        property.status === "Em andamento" ? "text-primary" : "text-muted-foreground"
+                      }`}>
+                        {property.status}
+                      </span>
                     </div>
-                    <span className={`text-xs uppercase tracking-wider font-medium ${
-                      obra.status === "Em andamento" ? "text-primary" : "text-muted-foreground"
-                    }`}>
-                      {obra.status}
-                    </span>
+                    <p className="text-muted-foreground text-xs mb-4">{property.images.length} fotos</p>
+                    <Button
+                      onClick={() => openGallery(property)}
+                      className="w-full rounded-none uppercase tracking-wider text-xs font-body"
+                    >
+                      Ver Detalhes
+                    </Button>
                   </div>
                 </div>
               </ScrollReveal>
@@ -55,26 +70,14 @@ const Obras = () => {
         </div>
       </section>
 
-      {/* Video Section */}
-      <section className="py-24 bg-secondary/5">
-        <div className="container mx-auto px-4">
-          <ScrollReveal>
-            <div className="text-center mb-12">
-              <p className="text-primary uppercase tracking-[0.3em] text-sm mb-3">Tours Virtuais</p>
-              <h2 className="text-3xl md:text-4xl font-heading font-semibold">Veja nossos vídeos</h2>
-            </div>
-          </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {[1, 2].map((v, i) => (
-              <ScrollReveal key={v} delay={i * 0.1}>
-                <div className="aspect-video bg-secondary/20 border border-border flex items-center justify-center">
-                  <span className="text-muted-foreground text-sm">Player de vídeo / Embed Reels</span>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Lightbox */}
+      <ImageLightbox
+        images={selectedProperty?.images ?? []}
+        initialIndex={lightboxIndex}
+        open={!!selectedProperty}
+        onOpenChange={(open) => { if (!open) setSelectedProperty(null); }}
+        title={selectedProperty?.title}
+      />
     </Layout>
   );
 };
