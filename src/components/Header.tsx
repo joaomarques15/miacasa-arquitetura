@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/logo-miacasa-new.png";
+import logo from "@/assets/logo-miacasa-header.png";
 
 const BRIEFING_URL = "https://refresher.com.br/SXpyZXZxMWlMV0c2LzJTU3lETGREdz09/briefing";
 
@@ -20,9 +20,11 @@ const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-      <div className="container mx-auto flex items-center justify-between h-20 px-4">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="MIA CASA Arquitetura" className="h-12 w-auto" />
+      <div className="container mx-auto flex items-center justify-between h-24 px-4">
+        <Link to="/" className="flex items-center">
+          <div className="h-14 w-24 overflow-hidden relative rounded-sm">
+            <img src={logo} alt="MIA CASA Arquitetura e Construção" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[46%] h-[180%] w-auto object-contain" />
+          </div>
         </Link>
 
         {/* Desktop Nav */}
