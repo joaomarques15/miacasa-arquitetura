@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Instagram, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/logo-miacasa.png";
+import logo from "@/assets/logo-miacasa-new.png";
 
 const BRIEFING_URL = "https://refresher.com.br/SXpyZXZxMWlMV0c2LzJTU3lETGREdz09/briefing";
 
@@ -34,7 +34,7 @@ const Footer = () => {
           <div>
             <img src={logo} alt="MIA CASA" className="h-10 w-auto mb-4 brightness-0 invert" />
             <p className="text-secondary-foreground/60 text-sm leading-relaxed">
-              Arquitetura e execução de obras com atendimento personalizado em Porto Alegre e região.
+              Arquitetura e Construção — Projetos, administração, construção e interiores em Itupeva e região.
             </p>
           </div>
 
@@ -53,17 +53,19 @@ const Footer = () => {
           <div>
             <h4 className="font-heading text-lg font-semibold mb-4">Contato</h4>
             <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-2 text-secondary-foreground/60">
-                <Phone size={16} />
-                <span>(51) 99999-9999</span>
+              <li>
+                <a href="https://wa.me/5511973515180" className="flex items-center gap-2 text-secondary-foreground/60 hover:text-primary transition-colors">
+                  <Phone size={16} />
+                  <span>(11) 9.7351-5180</span>
+                </a>
               </li>
               <li className="flex items-center gap-2 text-secondary-foreground/60">
                 <Mail size={16} />
-                <span>contato@miacasa.arq.br</span>
+                <span>kaiochinarelli@gmail.com</span>
               </li>
               <li>
                 <a
-                  href="https://instagram.com"
+                  href="https://instagram.com/miacasa.arq"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-secondary-foreground/60 hover:text-primary transition-colors"
@@ -72,12 +74,15 @@ const Footer = () => {
                   <span>@miacasa.arq</span>
                 </a>
               </li>
+              <li className="flex items-start gap-2 text-secondary-foreground/60 mt-2">
+                <span className="text-xs leading-relaxed">Av. Guanabara, 131 - Sala A<br />Jd. São Vicente - Itupeva - SP</span>
+              </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-secondary-foreground/10 mt-10 pt-6 text-center text-xs text-secondary-foreground/40">
-          © {new Date().getFullYear()} MIA CASA Arquitetura. Todos os direitos reservados.
+          © {new Date().getFullYear()} MIA CASA Arquitetura e Construção. Todos os direitos reservados.
         </div>
       </div>
     </footer>

@@ -100,7 +100,7 @@ const Index = () => {
             </ScrollReveal>
             <ScrollReveal delay={0.2}>
               <p className="text-secondary-foreground/70 text-lg mb-10 leading-relaxed max-w-lg">
-                Do sonho ao projeto, do projeto à obra. Atendimento completo e personalizado em Porto Alegre e região.
+                Do sonho ao projeto, do projeto à obra. Atendimento completo e personalizado em Itupeva e região.
               </p>
             </ScrollReveal>
             <ScrollReveal delay={0.3}>
